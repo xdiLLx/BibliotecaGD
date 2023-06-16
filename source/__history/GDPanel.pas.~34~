@@ -25,10 +25,6 @@ type
   TBorders = (bdNone, bdLeft, bdRight, bdTop, bdBottom);
 
 type
-  TGDPanelAlign = (paNone, paLeft, paTop, paRight, paBottom, paClient,
-    paCenter);
-
-type
   TGDPanel = class(TPanel)
   private
     FRadius: Integer;
@@ -36,8 +32,6 @@ type
     FMousePoint: TPoint;
     FResizeOptions: TResizeOptions;
     FResizingBorder: TBorders;
-    FGDPanelAlign: TGDPanelAlign;
-    procedure SetGDPanelAlign(Value: TGDPanelAlign);
     procedure SetRadius(const Value: Integer);
     procedure SetResizeOptions(const Value: TResizeOptions);
   protected
@@ -55,8 +49,6 @@ type
     property Radius: Integer read FRadius write SetRadius;
     property ResizeOptions: TResizeOptions read FResizeOptions
       write SetResizeOptions;
-    property AlignPanel: TGDPanelAlign read FGDPanelAlign write SetGDPanelAlign;
-    property Align stored False;
   end;
 
 procedure Register;
@@ -87,51 +79,12 @@ begin
   inherited;
 end;
 
-procedure TGDPanel.Resize;
-var
-  Region: HRGN;
-begin
-  inherited;
-  Region := CreateRoundRectRgn(0, 0, Width, Height, FRadius, FRadius);
-  SetWindowRgn(Handle, Region, True);
-  DeleteObject(Region); // Libera a região após usá-la
-end;
-
-procedure TGDPanel.SetGDPanelAlign(Value: TGDPanelAlign);
-begin
-  if FGDPanelAlign <> Value then
-  begin
-    FGDPanelAlign := Value;
-
-    case Value of
-      paNone:
-        inherited Align := alNone;
-      paLeft:
-        inherited Align := alLeft;
-      paTop:
-        inherited Align := alTop;
-      paRight:
-        inherited Align := alRight;
-      paBottom:
-        inherited Align := alBottom;
-      paClient:
-        inherited Align := alClient;
-      paCenter:
-        begin
-          inherited Align := alNone;
-          Left := (Parent.ClientWidth - Width) div 2;
-          Top := (Parent.ClientHeight - Height) div 2;
-        end;
-    end;
-  end;
-end;
-
 procedure TGDPanel.SetRadius(const Value: Integer);
 begin
   if FRadius <> Value then
   begin
     FRadius := Value;
-    Invalidate; // Force the control to be repainted
+    Invalidate;  // Force the control to be repainted
   end;
 end;
 
@@ -140,8 +93,7 @@ begin
   FResizeOptions.Assign(Value);
 end;
 
-procedure TGDPanel.MouseDown(Button: TMouseButton; Shift: TShiftState;
-  X, Y: Integer);
+procedure TGDPanel.MouseDown(Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
 const
   BORDER_SIZE = 10;
 begin
@@ -169,7 +121,7 @@ end;
 
 procedure TGDPanel.MouseMove(Shift: TShiftState; X, Y: Integer);
 var
-  NewWidth, NewHeight: Integer;
+  NewWidth, NewHeight, NewLeft, NewTop: Integer;
 begin
   inherited;
   if FMouseDown and FResizeOptions.CanResize then
@@ -177,11 +129,12 @@ begin
     case FResizingBorder of
       bdLeft:
         begin
+          NewLeft := Self.Left + X - FMousePoint.X;
           NewWidth := Self.Width - X + FMousePoint.X;
           if NewWidth >= FResizeOptions.MinWidth then
           begin
+            Self.Left := NewLeft;
             Self.Width := NewWidth;
-            Self.Left := Self.Left + X - FMousePoint.X;
           end;
         end;
       bdRight:
@@ -192,9 +145,11 @@ begin
         end;
       bdTop:
         begin
+          NewTop := Self.Top + Y - FMousePoint.Y;
           NewHeight := Self.Height - Y + FMousePoint.Y;
           if NewHeight >= FResizeOptions.MinHeight then
           begin
+            Self.Top := NewTop;
             Self.Height := NewHeight;
           end;
         end;
@@ -209,7 +164,6 @@ begin
     FMousePoint := Point(X, Y);
   end;
 end;
-
 
 procedure TGDPanel.MouseUp(Button: TMouseButton; Shift: TShiftState;
   X, Y: Integer);

@@ -4,10 +4,10 @@
     <Transaction>2023/06/15 23:19:43.000.907,=E:\Meus Projetos\BibliotecaGD\Unit1.pas</Transaction>
     <Transaction>2023/06/15 23:19:52.000.719,E:\Meus Projetos\BibliotecaGD\Teste.pas=E:\Meus Projetos\BibliotecaGD\Unit1.pas</Transaction>
     <Transaction>2023/06/15 23:20:58.000.067,E:\Meus Projetos\BibliotecaGD\Teste.pas=</Transaction>
-    <Transaction>2023/06/15 23:22:17.000.218,=E:\Meus Projetos\BibliotecaGD\source\JOSE.Encoding.Base64.pas</Transaction>
+    <Transaction>2023/06/15 23:22:17.000.149,=E:\Meus Projetos\BibliotecaGD\source\JOSE.Core.JWK.pas</Transaction>
     <Transaction>2023/06/15 23:22:17.000.204,=E:\Meus Projetos\BibliotecaGD\source\JOSE.Core.JWT.pas</Transaction>
     <Transaction>2023/06/15 23:22:17.000.074,=E:\Meus Projetos\BibliotecaGD\source\GDGoogleDriveConnector.pas</Transaction>
-    <Transaction>2023/06/15 23:22:17.000.149,=E:\Meus Projetos\BibliotecaGD\source\JOSE.Core.JWK.pas</Transaction>
+    <Transaction>2023/06/15 23:22:17.000.218,=E:\Meus Projetos\BibliotecaGD\source\JOSE.Encoding.Base64.pas</Transaction>
     <Transaction>2023/06/15 23:22:17.000.162,=E:\Meus Projetos\BibliotecaGD\source\JOSE.Core.JWS.pas</Transaction>
     <Transaction>2023/06/15 23:22:17.000.135,=E:\Meus Projetos\BibliotecaGD\source\JOSE.Core.Builder.pas</Transaction>
     <Transaction>2023/06/15 23:22:17.000.089,=E:\Meus Projetos\BibliotecaGD\source\GDOAuthConnector.pas</Transaction>

@@ -169,7 +169,7 @@ end;
 
 procedure TGDPanel.MouseMove(Shift: TShiftState; X, Y: Integer);
 var
-  NewWidth, NewHeight: Integer;
+  NewWidth, NewHeight, NewLeft, NewTop: Integer;
 begin
   inherited;
   if FMouseDown and FResizeOptions.CanResize then
@@ -177,39 +177,47 @@ begin
     case FResizingBorder of
       bdLeft:
         begin
+          NewLeft := Self.Left + X - FMousePoint.X;
           NewWidth := Self.Width - X + FMousePoint.X;
           if NewWidth >= FResizeOptions.MinWidth then
           begin
+            Self.Left := NewLeft;
             Self.Width := NewWidth;
-            Self.Left := Self.Left + X - FMousePoint.X;
+            FMousePoint := Point(X, Y); // Moved inside the if statement
           end;
         end;
       bdRight:
         begin
           NewWidth := Self.Width + X - FMousePoint.X;
           if NewWidth >= FResizeOptions.MinWidth then
+          begin
             Self.Width := NewWidth;
+            FMousePoint := Point(X, Y); // Moved inside the if statement
+          end;
         end;
       bdTop:
         begin
+          NewTop := Self.Top + Y - FMousePoint.Y;
           NewHeight := Self.Height - Y + FMousePoint.Y;
           if NewHeight >= FResizeOptions.MinHeight then
           begin
+            Self.Top := NewTop;
             Self.Height := NewHeight;
+            FMousePoint := Point(X, Y); // Moved inside the if statement
           end;
         end;
       bdBottom:
         begin
           NewHeight := Self.Height + Y - FMousePoint.Y;
           if NewHeight >= FResizeOptions.MinHeight then
+          begin
             Self.Height := NewHeight;
+            FMousePoint := Point(X, Y); // Moved inside the if statement
+          end;
         end;
     end;
-
-    FMousePoint := Point(X, Y);
   end;
 end;
-
 
 procedure TGDPanel.MouseUp(Button: TMouseButton; Shift: TShiftState;
   X, Y: Integer);
