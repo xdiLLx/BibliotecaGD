@@ -1,0 +1,52 @@
+package GD;
+
+{$R *.res}
+{$IFDEF IMPLICITBUILDING This IFDEF should not be used by users}
+{$ALIGN 8}
+{$ASSERTIONS ON}
+{$BOOLEVAL OFF}
+{$DEBUGINFO OFF}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA ON}
+{$IOCHECKS ON}
+{$LOCALSYMBOLS ON}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OPTIMIZATION OFF}
+{$OVERFLOWCHECKS ON}
+{$RANGECHECKS ON}
+{$REFERENCEINFO ON}
+{$SAFEDIVIDE OFF}
+{$STACKFRAMES ON}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS ON}
+{$WRITEABLECONST OFF}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $400000}
+{$DEFINE DEBUG}
+{$ENDIF IMPLICITBUILDING}
+{$IMPLICITBUILD ON}
+
+requires
+  rtl,
+  bindengine,
+  IndySystem,
+  IndyProtocols,
+  IndyCore,
+  bindcomp,
+  RESTComponents,
+  vcl;
+
+contains
+  GDGoogleDriveConnector in 'GDGoogleDriveConnector.pas',
+  JOSE.Core.Builder in 'JOSE.Core.Builder.pas',
+  JOSE.Core.JWK in 'JOSE.Core.JWK.pas',
+  JOSE.Core.JWS in 'JOSE.Core.JWS.pas',
+  JOSE.Core.JWT in 'JOSE.Core.JWT.pas',
+  JOSE.Encoding.Base64 in 'JOSE.Encoding.Base64.pas',
+  JOSE.Types.Bytes in 'JOSE.Types.Bytes.pas',
+  JOSE.Types.JSON in 'JOSE.Types.JSON.pas',
+  GDOAuthConnector in 'GDOAuthConnector.pas',
+  GDPanel in 'GDPanel.pas';
+
+end.
