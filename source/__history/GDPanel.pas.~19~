@@ -3,7 +3,8 @@ unit GDPanel;
 interface
 
 uses
-  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes,
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
+  System.Classes,
   Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls;
 
 type
@@ -20,6 +21,7 @@ type
     property MinHeight: Integer read FMinHeight write FMinHeight default 100;
   end;
 
+type
   TGDPanel = class(TPanel)
   private
     FRadius: Integer;
@@ -27,19 +29,25 @@ type
     FMousePoint: TPoint;
     FResizeOptions: TResizeOptions;
     procedure SetRadius(const Value: Integer);
-    procedure SetResizeOptions(const Value: TResizeOptions);
+    procedure SetCanResize(const Value: Boolean);
+    procedure SetMinWidth(const Value: Integer);
+    procedure SetMinHeight(const Value: Integer);
+
   protected
     procedure Paint; override;
-    procedure MouseDown(Button: TMouseButton; Shift: TShiftState; X, Y: Integer); override;
+    procedure MouseDown(Button: TMouseButton; Shift: TShiftState;
+      X, Y: Integer); override;
     procedure MouseMove(Shift: TShiftState; X, Y: Integer); override;
-    procedure MouseUp(Button: TMouseButton; Shift: TShiftState; X, Y: Integer); override;
-    procedure Resize; override;
+    procedure MouseUp(Button: TMouseButton; Shift: TShiftState;
+      X, Y: Integer); override;
+    procedure Resize;
   public
     constructor Create(AOwner: TComponent); override;
-    destructor Destroy; override;
   published
     property Radius: Integer read FRadius write SetRadius;
-    property ResizeOptions: TResizeOptions read FResizeOptions write SetResizeOptions;
+    property CanResize: Boolean read FCanResize write SetCanResize;
+    property MinWidth: Integer read FMinWidth write SetMinWidth;
+    property MinHeight: Integer read FMinHeight write SetMinHeight;
   end;
 
 procedure Register;
@@ -61,27 +69,6 @@ begin
   DoubleBuffered := True;
   ParentBackground := False;
   FRadius := 15;
-  FResizeOptions := TResizeOptions.Create;
-end;
-
-destructor TGDPanel.Destroy;
-begin
-  FResizeOptions.Free;
-  inherited;
-end;
-
-procedure TGDPanel.SetRadius(const Value: Integer);
-begin
-  if FRadius <> Value then
-  begin
-    FRadius := Value;
-    Invalidate;
-  end;
-end;
-
-procedure TGDPanel.SetResizeOptions(const Value: TResizeOptions);
-begin
-  FResizeOptions.Assign(Value);
 end;
 
 procedure TGDPanel.MouseDown(Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
@@ -89,7 +76,7 @@ const
   BORDER_SIZE = 10;
 begin
   inherited;
-  if (Button = mbLeft) and (FResizeOptions.CanResize) then
+  if (Button = mbLeft) and (FCanResize) then
   begin
     if (X <= BORDER_SIZE) or (X >= Width - BORDER_SIZE) or
        (Y <= BORDER_SIZE) or (Y >= Height - BORDER_SIZE) then
@@ -105,13 +92,13 @@ var
   NewWidth, NewHeight: Integer;
 begin
   inherited;
-  if FMouseDown and FResizeOptions.CanResize then
+  if FMouseDown and FCanResize then
   begin
     NewWidth := Self.Width + (X - FMousePoint.X);
     NewHeight := Self.Height + (Y - FMousePoint.Y);
-    if NewWidth >= FResizeOptions.MinWidth then
+    if NewWidth >= FMinWidth then
       Self.Width := NewWidth;
-    if NewHeight >= FResizeOptions.MinHeight then
+    if NewHeight >= FMinHeight then
       Self.Height := NewHeight;
     FMousePoint := Point(X, Y);
   end;
@@ -144,15 +131,40 @@ begin
   DeleteObject(Region); // Libera a região após usá-la
 end;
 
-{ TResizeOptions }
-
-constructor TResizeOptions.Create;
+procedure TGDPanel.SetRadius(const Value: Integer);
 begin
-  inherited;
-  FCanResize := False;
-  FMinWidth := 100;
-  FMinHeight := 100;
+  if FRadius <> Value then
+  begin
+    FRadius := Value;
+    Invalidate;
+  end;
 end;
 
-end.
+procedure TGDPanel.SetCanResize(const Value: Boolean);
+begin
+  if FCanResize <> Value then
+  begin
+    FCanResize := Value;
+  end;
+end;
 
+procedure TGDPanel.SetMinWidth(const Value: Integer);
+begin
+  if FMinWidth <> Value then
+  begin
+    FMinWidth := Value;
+    if Width < FMinWidth then
+      Width := FMinWidth;
+  end;
+end;
+
+procedure TGDPanel.SetMinHeight(const Value: Integer);
+begin
+  if FMinHeight <> Value then
+  begin
+    FMinHeight := Value;
+    if Height < FMinHeight then
+      Height := FMinHeight;
+  end;
+end;
+end.

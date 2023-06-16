@@ -95,16 +95,16 @@
         <DCCReference Include="bindcomp.dcp"/>
         <DCCReference Include="RESTComponents.dcp"/>
         <DCCReference Include="vcl.dcp"/>
-        <DCCReference Include="GDGoogleDriveConnector.pas"/>
-        <DCCReference Include="JOSE.Core.Builder.pas"/>
-        <DCCReference Include="JOSE.Core.JWK.pas"/>
-        <DCCReference Include="JOSE.Core.JWS.pas"/>
-        <DCCReference Include="JOSE.Core.JWT.pas"/>
-        <DCCReference Include="JOSE.Encoding.Base64.pas"/>
-        <DCCReference Include="JOSE.Types.Bytes.pas"/>
-        <DCCReference Include="JOSE.Types.JSON.pas"/>
-        <DCCReference Include="GDOAuthConnector.pas"/>
-        <DCCReference Include="GDPanel.pas"/>
+        <DCCReference Include="source\GDGoogleDriveConnector.pas"/>
+        <DCCReference Include="source\GDOAuthConnector.pas"/>
+        <DCCReference Include="source\GDPanel.pas"/>
+        <DCCReference Include="source\JOSE.Core.Builder.pas"/>
+        <DCCReference Include="source\JOSE.Core.JWK.pas"/>
+        <DCCReference Include="source\JOSE.Core.JWS.pas"/>
+        <DCCReference Include="source\JOSE.Core.JWT.pas"/>
+        <DCCReference Include="source\JOSE.Encoding.Base64.pas"/>
+        <DCCReference Include="source\JOSE.Types.Bytes.pas"/>
+        <DCCReference Include="source\JOSE.Types.JSON.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
@@ -142,7 +142,7 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile LocalName="..\..\..\..\..\Public\Documents\Embarcadero\Studio\22.0\Bpl\GD.bpl" Configuration="Debug" Class="ProjectOutput">
+                <DeployFile LocalName="C:\Users\Public\Documents\Embarcadero\Studio\22.0\Bpl\GD.bpl" Configuration="Debug" Class="ProjectOutput">
                     <Platform Name="Win32">
                         <RemoteName>GD.bpl</RemoteName>
                         <Overwrite>true</Overwrite>

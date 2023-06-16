@@ -38,15 +38,16 @@ requires
   vcl;
 
 contains
-  GDGoogleDriveConnector in 'source\GDGoogleDriveConnector.pas',
-  GDOAuthConnector in 'source\GDOAuthConnector.pas',
-  GDPanel in 'source\GDPanel.pas',
-  JOSE.Core.Builder in 'source\JOSE.Core.Builder.pas',
-  JOSE.Core.JWK in 'source\JOSE.Core.JWK.pas',
-  JOSE.Core.JWS in 'source\JOSE.Core.JWS.pas',
-  JOSE.Core.JWT in 'source\JOSE.Core.JWT.pas',
-  JOSE.Encoding.Base64 in 'source\JOSE.Encoding.Base64.pas',
-  JOSE.Types.Bytes in 'source\JOSE.Types.Bytes.pas',
-  JOSE.Types.JSON in 'source\JOSE.Types.JSON.pas';
+  GDGoogleDriveConnector in 'GDGoogleDriveConnector.pas',
+  JOSE.Core.Builder in 'JOSE.Core.Builder.pas',
+  JOSE.Core.JWK in 'JOSE.Core.JWK.pas',
+  JOSE.Core.JWS in 'JOSE.Core.JWS.pas',
+  JOSE.Core.JWT in 'JOSE.Core.JWT.pas',
+  JOSE.Encoding.Base64 in 'JOSE.Encoding.Base64.pas',
+  JOSE.Types.Bytes in 'JOSE.Types.Bytes.pas',
+  JOSE.Types.JSON in 'JOSE.Types.JSON.pas',
+  GDOAuthConnector in 'GDOAuthConnector.pas',
+  GDPanel in 'GDPanel.pas',
+  Teste in 'Teste.pas';
 
 end.
