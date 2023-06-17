@@ -51,6 +51,7 @@ type
     procedure MouseUp(Button: TMouseButton; Shift: TShiftState;
       X, Y: Integer); override;
     procedure Resize; override;
+    procedure ParentResized(Sender: TObject);
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
@@ -84,7 +85,9 @@ begin
   FResizeOptions := TResizeOptions.Create;
 
   if Assigned(AOwner) and (AOwner is TWinControl) then
+  begin
     FParent := TWinControl(AOwner);
+  end;
 end;
 
 destructor TGDPanel.Destroy;
@@ -266,6 +269,15 @@ begin
     Canvas.StretchDraw(R, Bitmap);
   finally
     Bitmap.Free;
+  end;
+end;
+
+procedure TGDPanel.ParentResized(Sender: TObject);
+begin
+  if (FGDPanelAlign = paCenter) then
+  begin
+    Left := (FParent.ClientWidth - Width) div 2;
+    Top := (FParent.ClientHeight - Height) div 2;
   end;
 end;
 

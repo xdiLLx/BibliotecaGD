@@ -87,7 +87,6 @@ begin
   if Assigned(AOwner) and (AOwner is TWinControl) then
   begin
     FParent := TWinControl(AOwner);
-    FParent.OnResize := ParentResized;
   end;
 end;
 
@@ -143,9 +142,10 @@ begin
         inherited Align := alBottom;
       paClient:
         inherited Align := alClient;
-      paCenter:
+       paCenter:
         begin
           inherited Align := alNone;
+          Anchors := [akLeft, akTop, akRight, akBottom];  // Ative as ancoras em todos os lados
           Left := (Parent.ClientWidth - Width) div 2;
           Top := (Parent.ClientHeight - Height) div 2;
         end;

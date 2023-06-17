@@ -51,6 +51,7 @@ type
     procedure MouseUp(Button: TMouseButton; Shift: TShiftState;
       X, Y: Integer); override;
     procedure Resize; override;
+    procedure ParentResized(Sender: TObject);
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
@@ -86,7 +87,6 @@ begin
   if Assigned(AOwner) and (AOwner is TWinControl) then
   begin
     FParent := TWinControl(AOwner);
-    FParent.OnResize := ParentResized;
   end;
 end;
 
@@ -114,14 +114,13 @@ end;
 procedure TGDPanel.SetBounds(ALeft, ATop, AWidth, AHeight: Integer);
 begin
   inherited SetBounds(ALeft, ATop, AWidth, AHeight);
-  if (csDesigning in ComponentState) and (FGDPanelAlign = paCenter) and Assigned(Parent) then
+  if (csDesigning in ComponentState) and (FGDPanelAlign = paCenter) and
+    Assigned(Parent) then
   begin
     inherited SetBounds((Parent.ClientWidth - Width) div 2,
-                        (Parent.ClientHeight - Height) div 2,
-                        Width, Height);
+      (Parent.ClientHeight - Height) div 2, Width, Height);
   end;
 end;
-
 
 procedure TGDPanel.SetGDPanelAlign(Value: TGDPanelAlign);
 begin
@@ -131,20 +130,35 @@ begin
 
     case Value of
       paNone:
-        inherited Align := alNone;
+        begin
+          inherited Align := alNone;
+          Anchors := [];
+        end;
       paLeft:
-        inherited Align := alLeft;
+        begin
+          inherited Align := alLeft;
+        end;
       paTop:
-        inherited Align := alTop;
+        begin
+          inherited Align := alTop;
+        end;
       paRight:
-        inherited Align := alRight;
+        begin
+          inherited Align := alRight;
+        end;
       paBottom:
-        inherited Align := alBottom;
+        begin
+          inherited Align := alBottom;
+        end;
       paClient:
-        inherited Align := alClient;
+        begin
+          inherited Align := alClient;
+        end;
       paCenter:
         begin
           inherited Align := alNone;
+          Anchors := [akLeft, akTop, akRight, akBottom];
+          // Ative as ancoras em todos os lados
           Left := (Parent.ClientWidth - Width) div 2;
           Top := (Parent.ClientHeight - Height) div 2;
         end;
@@ -229,15 +243,14 @@ begin
           SetBounds(Left, Top, Width, Height + deltaY);
     end;
     if (FGDPanelAlign in [paCenter]) and Assigned(FParent) then
-      begin
-        Left := (FParent.ClientWidth - Width) div 2;
-        Top := (FParent.ClientHeight - Height) div 2;
-      end;
+    begin
+      Left := (FParent.ClientWidth - Width) div 2;
+      Top := (FParent.ClientHeight - Height) div 2;
+    end;
     FMousePoint := Point(X, Y);
     FResizing := False;
   end;
 end;
-
 
 procedure TGDPanel.MouseUp(Button: TMouseButton; Shift: TShiftState;
   X, Y: Integer);
@@ -269,6 +282,15 @@ begin
     Canvas.StretchDraw(R, Bitmap);
   finally
     Bitmap.Free;
+  end;
+end;
+
+procedure TGDPanel.ParentResized(Sender: TObject);
+begin
+  if (FGDPanelAlign = paCenter) then
+  begin
+    Left := (FParent.ClientWidth - Width) div 2;
+    Top := (FParent.ClientHeight - Height) div 2;
   end;
 end;
 

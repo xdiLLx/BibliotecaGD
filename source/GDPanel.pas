@@ -114,14 +114,13 @@ end;
 procedure TGDPanel.SetBounds(ALeft, ATop, AWidth, AHeight: Integer);
 begin
   inherited SetBounds(ALeft, ATop, AWidth, AHeight);
-  if (csDesigning in ComponentState) and (FGDPanelAlign = paCenter) and Assigned(Parent) then
+  if (csDesigning in ComponentState) and (FGDPanelAlign = paCenter) and
+    Assigned(Parent) then
   begin
     inherited SetBounds((Parent.ClientWidth - Width) div 2,
-                        (Parent.ClientHeight - Height) div 2,
-                        Width, Height);
+      (Parent.ClientHeight - Height) div 2, Width, Height);
   end;
 end;
-
 
 procedure TGDPanel.SetGDPanelAlign(Value: TGDPanelAlign);
 begin
@@ -131,20 +130,40 @@ begin
 
     case Value of
       paNone:
-        inherited Align := alNone;
+        begin
+          inherited Align := alNone;
+          Anchors := [];
+        end;
       paLeft:
-        inherited Align := alLeft;
+        begin
+          inherited Align := alLeft;
+          Anchors := [];
+        end;
       paTop:
-        inherited Align := alTop;
+        begin
+          inherited Align := alTop;
+          Anchors := [];
+        end;
       paRight:
-        inherited Align := alRight;
+        begin
+          inherited Align := alRight;
+          Anchors := [];
+        end;
       paBottom:
-        inherited Align := alBottom;
+        begin
+          inherited Align := alBottom;
+          Anchors := [];
+        end;
       paClient:
-        inherited Align := alClient;
+        begin
+          inherited Align := alClient;
+          Anchors := [];
+        end;
       paCenter:
         begin
           inherited Align := alNone;
+          Anchors := [akLeft, akTop, akRight, akBottom];
+          // Ative as ancoras em todos os lados
           Left := (Parent.ClientWidth - Width) div 2;
           Top := (Parent.ClientHeight - Height) div 2;
         end;
@@ -229,15 +248,14 @@ begin
           SetBounds(Left, Top, Width, Height + deltaY);
     end;
     if (FGDPanelAlign in [paCenter]) and Assigned(FParent) then
-      begin
-        Left := (FParent.ClientWidth - Width) div 2;
-        Top := (FParent.ClientHeight - Height) div 2;
-      end;
+    begin
+      Left := (FParent.ClientWidth - Width) div 2;
+      Top := (FParent.ClientHeight - Height) div 2;
+    end;
     FMousePoint := Point(X, Y);
     FResizing := False;
   end;
 end;
-
 
 procedure TGDPanel.MouseUp(Button: TMouseButton; Shift: TShiftState;
   X, Y: Integer);
