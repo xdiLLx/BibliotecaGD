@@ -43,6 +43,7 @@ type
     procedure SetRadius(const Value: Integer);
     procedure SetResizeOptions(const Value: TResizeOptions);
     procedure SetBounds(ALeft, ATop, AWidth, AHeight: Integer);
+    procedure WMSize(var Message: TWMSize); message WM_SIZE ;
   protected
     procedure Paint; override;
     procedure MouseDown(Button: TMouseButton; Shift: TShiftState;
@@ -164,6 +165,16 @@ end;
 procedure TGDPanel.SetResizeOptions(const Value: TResizeOptions);
 begin
   FResizeOptions.Assign(Value);
+end;
+
+procedure TGDPanel.WMSize(var Message: TWMSize);
+begin
+  inherited;
+  if (FGDPanelAlign = paCenter) and Assigned(FParent) then
+  begin
+    Left := (FParent.ClientWidth - Width) div 2;
+    Top := (FParent.ClientHeight - Height) div 2;
+  end;
 end;
 
 procedure TGDPanel.MouseDown(Button: TMouseButton; Shift: TShiftState;
