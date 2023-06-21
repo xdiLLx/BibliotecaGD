@@ -39,8 +39,6 @@ type
     FResizeOptions: TResizeOptions;
     FResizingBorder: TBorders;
     FGDPanelAlign: TGDPanelAlign;
-    FOriginalWidth: Integer;
-    FOriginalHeight: Integer;
     procedure SetGDPanelAlign(Value: TGDPanelAlign);
     procedure SetRadius(const Value: Integer);
     procedure SetResizeOptions(const Value: TResizeOptions);
@@ -75,7 +73,6 @@ begin
 end;
 
 { TGDPanel }
-
 constructor TGDPanel.Create(AOwner: TComponent);
 begin
   inherited;
@@ -85,9 +82,6 @@ begin
   ParentBackground := False;
   FRadius := 15;
   FResizeOptions := TResizeOptions.Create;
-  FOriginalWidth := Width;
-  FOriginalHeight := Height;
-
   if Assigned(AOwner) and (AOwner is TWinControl) then
   begin
     FParent := TWinControl(AOwner);
@@ -108,12 +102,15 @@ begin
   Region := CreateRoundRectRgn(0, 0, Width, Height, FRadius, FRadius);
   SetWindowRgn(Handle, Region, True);
   DeleteObject(Region); // Libera a região após usá-la
-  if FGDPanelAlign = paCenter then
+  if (FGDPanelAlign = paCenter) and Assigned(FParent) and not FResizing then
   begin
-    Left := (Parent.ClientWidth - FOriginalWidth) div 2;
-    Top := (Parent.ClientHeight - FOriginalHeight) div 2;
-    Width := FOriginalWidth;
-    Height := FOriginalHeight;
+    Left := (FParent.ClientWidth - Width) div 2;
+    Top := (FParent.ClientHeight - Height) div 2;
+  end;
+  if (FGDPanelAlign = paCenter) then
+  begin
+    AlignPanel:=paNone;
+    AlignPanel:=paCenter;
   end;
 end;
 
@@ -133,55 +130,27 @@ begin
   if FGDPanelAlign <> Value then
   begin
     FGDPanelAlign := Value;
-
     case Value of
       paNone:
-        begin
-          inherited Align := alNone;
-          Anchors := [];
-        end;
+        inherited Align := alNone;
       paLeft:
-        begin
-          inherited Align := alLeft;
-          Anchors := [];
-        end;
+        inherited Align := alLeft;
       paTop:
-        begin
-          inherited Align := alTop;
-          Anchors := [];
-        end;
+        inherited Align := alTop;
       paRight:
-        begin
-          inherited Align := alRight;
-          Anchors := [];
-        end;
+        inherited Align := alRight;
       paBottom:
-        begin
-          inherited Align := alBottom;
-          Anchors := [];
-        end;
+        inherited Align := alBottom;
       paClient:
-        begin
-          inherited Align := alClient;
-          Anchors := [];
-        end;
+        inherited Align := alClient;
       paCenter:
         begin
           inherited Align := alNone;
-          // Anchors := [akLeft, akTop, akRight, akBottom];
+          Anchors := [akLeft, akRight];
           // Ative as ancoras em todos os lados
-          if FResizingBorder = bdNone then
-          begin
-            Left := (Parent.ClientWidth - FOriginalWidth) div 2;
-            Top := (Parent.ClientHeight - FOriginalHeight) div 2;
-            Width := FOriginalWidth;
-            Height := FOriginalHeight;
-          end
-          else
-          begin
-            Left := (Parent.ClientWidth - FOriginalWidth) div 2;
-            Top := (Parent.ClientHeight - FOriginalHeight) div 2;
-          end;
+          Left := (Parent.ClientWidth - Width) div 2;
+          Top := (Parent.ClientHeight - Height) div 2;
+          Anchors := [];
         end;
     end;
   end;
@@ -192,7 +161,9 @@ begin
   if FRadius <> Value then
   begin
     FRadius := Value;
-    Invalidate; // Force the control to be repainted
+    Width := Width + 1;
+    Width := Width - 1;
+    Invalidate;
   end;
 end;
 
@@ -219,27 +190,49 @@ begin
       FResizingBorder := bdRight
     else
       FResizingBorder := bdNone;
-
     if FResizingBorder <> bdNone then
     begin
       FMouseDown := True;
       FMousePoint := Point(X, Y);
     end;
-
   end;
 end;
 
 procedure TGDPanel.MouseMove(Shift: TShiftState; X, Y: Integer);
 var
   deltaX, deltaY: Integer;
+const
+  BORDER_SIZE = 10;
 begin
   inherited;
+  if FResizeOptions.CanResize then
+  begin
+    if (Abs(Y - 0) < BORDER_SIZE) then
+    begin
+      Cursor := crSizeNS; // North-South resize cursor
+    end
+    else if (Abs(Y - Height) < BORDER_SIZE) then
+    begin
+      Cursor := crSizeNS; // North-South resize cursor
+    end
+    else if (Abs(X - 0) < BORDER_SIZE) then
+    begin
+      Cursor := crSizeWE; // West-East resize cursor
+    end
+    else if (Abs(X - Width) < BORDER_SIZE) then
+    begin
+      Cursor := crSizeWE; // West-East resize cursor
+    end
+    else
+    begin
+      Cursor := crDefault;
+    end;
+  end;
   if FMouseDown and FResizeOptions.CanResize then
   begin
     FResizing := True;
     deltaX := X - FMousePoint.X;
     deltaY := Y - FMousePoint.Y;
-
     case FResizingBorder of
       bdLeft:
         if Width - deltaX >= FResizeOptions.MinWidth then
@@ -247,18 +240,15 @@ begin
           if FGDPanelAlign = paCenter then
             SetBounds(Left + deltaX div 2, Top, Width - deltaX, Height);
         end;
-
       bdRight:
         if Width + deltaX >= FResizeOptions.MinWidth then
           SetBounds(Left, Top, Width + deltaX, Height);
-
       bdTop:
         if Height - deltaY >= FResizeOptions.MinHeight then
         begin
           if FGDPanelAlign = paCenter then
             SetBounds(Left, Top + deltaY div 2, Width, Height - deltaY);
         end;
-
       bdBottom:
         if Height + deltaY >= FResizeOptions.MinHeight then
           SetBounds(Left, Top, Width, Height + deltaY);
@@ -278,16 +268,10 @@ procedure TGDPanel.MouseUp(Button: TMouseButton; Shift: TShiftState;
 begin
   inherited;
   FMouseDown := False;
-
   if (FGDPanelAlign = paCenter) and Assigned(Parent) then
   begin
-    Left := (Parent.ClientWidth - Width) div 2;
-    Top := (Parent.ClientHeight - Height) div 2;
-  end;
-  if FResizingBorder <> bdNone then
-  begin
-    FOriginalWidth := Width;
-    FOriginalHeight := Height;
+    AlignPanel:=paNone;
+    AlignPanel:=paCenter;
   end;
 end;
 
@@ -295,9 +279,9 @@ procedure TGDPanel.Paint;
 var
   R: TRect;
   Bitmap: TBitmap;
+  TextFormat: UINT;
 begin
   R := ClientRect;
-
   Bitmap := TBitmap.Create;
   try
     Bitmap.SetSize(Width, Height);
@@ -305,11 +289,18 @@ begin
     Bitmap.Canvas.Brush.Color := Color;
     Bitmap.Canvas.RoundRect(R.Left, R.Top, R.Right, R.Bottom, FRadius, FRadius);
 
+    // Desenha o texto da Caption
+    TextFormat := DT_SINGLELINE or DT_VCENTER or DT_CENTER;
+    Bitmap.Canvas.Font := Font;
+    Bitmap.Canvas.Brush.Style := bsClear;
+    DrawText(Bitmap.Canvas.Handle, PChar(Caption), Length(Caption), R, TextFormat);
+
     Canvas.StretchDraw(R, Bitmap);
   finally
     Bitmap.Free;
   end;
 end;
+
 
 procedure TGDPanel.ParentResized(Sender: TObject);
 begin
@@ -321,7 +312,6 @@ begin
 end;
 
 { TResizeOptions }
-
 constructor TResizeOptions.Create;
 begin
   inherited;

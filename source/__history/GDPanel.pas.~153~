@@ -29,7 +29,7 @@ type
     paCenter);
 
 type
-  TGDPanel = class(TPanel)
+  TGDPanel = class(TCustomPanel)
   private
     FRadius: Integer;
     FMouseDown: Boolean;
