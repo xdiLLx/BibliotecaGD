@@ -1,4 +1,4 @@
-'# DelphiGD Library
+# DelphiGD Library
 
 The DelphiGD Library is a collection of custom components for Delphi that offer additional functionality and advanced styling for the user interface.
 
