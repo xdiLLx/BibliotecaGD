@@ -6,7 +6,7 @@ The DelphiGD Library is a collection of custom components for Delphi that offer 
 
 The DelphiGD Library aims to enhance the development experience in Delphi by providing a set of powerful components with extended features. These components are designed to streamline the creation of visually appealing and interactive applications. With DelphiGD, you can easily incorporate advanced UI elements into your projects and customize them according to your specific needs.
 
-Confira o [README em Português](README.md) para consultar informações detalhadas de como utilizar a biblioteca.
+Confira o [README em Português](BibliotecaGD/README.md) para consultar informações detalhadas de como utilizar a biblioteca.
 
 ## Components
 
