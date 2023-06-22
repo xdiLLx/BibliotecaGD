@@ -20,19 +20,14 @@ Para utilizar a Biblioteca DelphiGD em seus projetos Delphi, siga estas etapas:
 3. Inclua a pasta de código-fonte da biblioteca nos caminhos de biblioteca do IDE do Delphi.
 4. Consulte a documentação e os exemplos fornecidos para cada componente para aprender como incorporá-los ao seu aplicativo.
 
-## Contribuição
+## Apoie o Projeto
 
-A Biblioteca DelphiGD é um projeto de código aberto, e contribuições são bem-vindas! Se você tiver ideias para melhorias, correções de bugs ou novos componentes, siga estas etapas:
-
-1. Faça um fork do repositório.
-2. Crie uma nova branch para a sua contribuição.
-3. Faça as alterações desejadas.
-4. Envie um pull request.
+A Biblioteca DelphiGD é um projeto de código aberto mantido por voluntários dedicados. Se você gostaria de apoiar o projeto e contribuir para seu desenvolvimento contínuo, você pode fazer uma doação por meio do Pix usando o QR Code abaixo:
 
 ## Licença
 
-A Biblioteca DelphiGD é licenciada sob a [Licença MIT](LICENSE).
+A Biblioteca DelphiGD é licenciada sob a [Licença MIT](LICENSE). A Licença MIT é uma licença permissiva que permite que você utilize, modifique e distribua o software, inclusive em projetos comerciais, desde que mantenha o aviso de direitos autorais e a declaração de licença.
 
 ## Contato
 
-Se você tiver alguma dúvida ou sugestão sobre a Biblioteca DelphiGD, entre em contato conosco em [seu-email@example.com](mailto:gabrieldill05@gmail.com).
+Se você tiver alguma dúvida ou sugestão sobre a Biblioteca DelphiGD, entre em contato conosco em [gabrieldill05@gmail.com](mailto:gabrieldill05@gmail.com).
