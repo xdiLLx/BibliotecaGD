@@ -9,7 +9,7 @@ Please refer to the [English README](help/README_EN.md) for detailed information
 
 ## Componentes
 
-- [TGDPanel](help/TGDPanel/README.md) - #[FUNCIONAL]#: Um painel personalizado com opções de redimensionamento, alinhamento e estilização.
+- [TGDPanel](help/TGDPanel/README.md) - [FUNCIONAL]: Um painel personalizado com opções de redimensionamento, alinhamento e estilização.
 
 ## Uso
 
